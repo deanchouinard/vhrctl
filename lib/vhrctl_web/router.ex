@@ -5,7 +5,7 @@ defmodule VhrCtlWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
-    plug :protect_from_forgery
+    # plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
 
@@ -17,12 +17,15 @@ defmodule VhrCtlWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/hello:messenger", PageController, :hello
+    post "/hello", PageController, :photo
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", VhrCtlWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", VhrCtlWeb do
+    pipe_through :api
+    post "/env", ApiController, :env
+   end
 
   # Enables LiveDashboard only for development
   #
