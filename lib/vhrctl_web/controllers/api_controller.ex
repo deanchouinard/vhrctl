@@ -6,7 +6,7 @@ defmodule VhrCtlWeb.ApiController do
     IO.inspect conn, label: "CONN"
     IO.inspect params, label: "PARAMS"
 
-    InfluxDB.insert(params["temp"], params["humid"])
+    InfluxDB.insert(params["temp"], params["humid"], params["batt"])
 
 
     json(conn, %{id: "from /api/env"})
