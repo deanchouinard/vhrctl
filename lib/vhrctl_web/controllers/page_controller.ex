@@ -21,11 +21,16 @@ defmodule VhrCtlWeb.PageController do
     id = conn.body_params["id"]
     IO.inspect id, label: "ID"
     IO.inspect params, label: "PARAMS"
+    %{"photo" => photo} = params
+    IO.inspect photo, label: "PHOTO"
+    %Plug.Upload{filename: filename} = photo
+    IO.inspect filename, label: "FILENAME"
+    #IO.inspect params["photo"]
     # {:ok, file} = File.open "#{photo.path}", [:read]
     # {:ok, file} = File.open "test.png", [:write]
     # IO.binwrite file, body
     # File.close file
-    File.copy(photo.path, "test.png")
+    File.copy(photo.path, filename)
     render(conn, "hello.html", messenger: "test photo")
   end
 
