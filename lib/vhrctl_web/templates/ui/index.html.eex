@@ -1,0 +1,9 @@
+ui
+<%= button("Take picture", to: "/take_picture")%>
+
+<%= link("Ping", to: "/ping")%>
+<%= link("Influxdb", to: "/iflx")%>
+
+  <h2>Hello World, from Phoenix!<%= @messenger %></h2>
+
+
