@@ -12,40 +12,41 @@ defmodule VhrCtlWeb.PageController do
   # def photo(conn, %{"body" => body} = params) do
   #   render(conn, "hello.html", messenger: body)
   # end
-  def photo(conn, params) do
-    # {:ok, body, conn} = Plug.Conn.read_part_body(conn, length: 8_000_000)
-    {:ok, body, conn} = read_form(conn, <<127>> )
-    IO.inspect conn, label: "CONN"
-    photo = conn.body_params["photo"]
-    IO.inspect photo, label: "PHOTO"
-    id = conn.body_params["id"]
-    IO.inspect id, label: "ID"
-    IO.inspect params, label: "PARAMS"
-    %{"photo" => photo} = params
-    IO.inspect photo, label: "PHOTO"
-    %Plug.Upload{filename: filename} = photo
-    IO.inspect filename, label: "FILENAME"
-    #IO.inspect params["photo"]
-    # {:ok, file} = File.open "#{photo.path}", [:read]
-    # {:ok, file} = File.open "test.png", [:write]
-    # IO.binwrite file, body
-    # File.close file
-    File.copy(photo.path, filename)
-    render(conn, "hello.html", messenger: "test photo")
-  end
-
-  def read_form(conn, acc) do
-    case Plug.Conn.read_part_body(conn, read_timeout: 8_000_000) do
-      {:more, body, conn}
-      -> IO.inspect body, label: "body-more"
-        read_form(conn, << acc, body>> )
-      {:ok, body, conn} -> 
-        IO.inspect body, label: "body-ok"
-        read_form(conn, <<acc, body>>)
-      {:done, conn} -> 
-        IO.inspect acc, label: "acc-done"
-        {:ok, acc, conn} 
-    end
-  end
+  # def photo(conn, params) do
+  #   IO.puts "PAGE CONTROLLER PHOTO"
+  #   # {:ok, body, conn} = Plug.Conn.read_part_body(conn, length: 8_000_000)
+  #   {:ok, body, conn} = read_form(conn, <<127>> )
+  #   IO.inspect conn, label: "CONN"
+  #   photo = conn.body_params["photo"]
+  #   IO.inspect photo, label: "PHOTO"
+  #   id = conn.body_params["id"]
+  #   IO.inspect id, label: "ID"
+  #   IO.inspect params, label: "PARAMS"
+  #   %{"photo" => photo} = params
+  #   IO.inspect photo, label: "PHOTO"
+  #   %Plug.Upload{filename: filename} = photo
+  #   IO.inspect filename, label: "FILENAME"
+  #   #IO.inspect params["photo"]
+  #   # {:ok, file} = File.open "#{photo.path}", [:read]
+  #   # {:ok, file} = File.open "test.png", [:write]
+  #   # IO.binwrite file, body
+  #   # File.close file
+  #   File.copy!(photo.path, "priv/static/#{filename}")
+  #   render(conn, "index.html", [messenger: filename, photo: filename])
+  # end
+  #
+  # def read_form(conn, acc) do
+  #   case Plug.Conn.read_part_body(conn, read_timeout: 8_000_000) do
+  #     {:more, body, conn}
+  #     -> IO.inspect body, label: "body-more"
+  #       read_form(conn, << acc, body>> )
+  #     {:ok, body, conn} -> 
+  #       IO.inspect body, label: "body-ok"
+  #       read_form(conn, <<acc, body>>)
+  #     {:done, conn} -> 
+  #       IO.inspect acc, label: "acc-done"
+  #       {:ok, acc, conn} 
+  #   end
+  # end
 
 end

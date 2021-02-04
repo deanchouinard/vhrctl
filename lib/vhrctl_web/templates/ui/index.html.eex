@@ -1,10 +1,14 @@
 ui
-<%= button("Take picture", to: "/take_picture")%>
+<%= link("Take picture", to: "/take_picture")%>
 
 <br/>
 <%= link("Ping", to: "/ping")%>
 <br/>
 <%= link("Influxdb", to: "/iflx")%>
+
+<%= @fphoto %>
+
+<%= img_tag(Routes.static_path(@conn, "/images/#{@fphoto}")) %>
 
   <h2>Hello World, from Phoenix!</h2>
 <%= raw(@messenger) %>

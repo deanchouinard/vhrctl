@@ -18,10 +18,10 @@ defmodule VhrCtlWeb.Router do
 
     get "/", PageController, :index
     get "/hello:messenger", PageController, :hello
-    post "/hello", PageController, :photo
+    post "/photo", UiController, :photo
 
     get "/ui", UiController, :index
-    post "/take_picture", UiController, :take_picture
+    get "/take_picture", UiController, :take_picture
     get "/ping", UiController, :ping
     get "/iflx", UiController, :iflx
 
