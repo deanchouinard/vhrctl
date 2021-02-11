@@ -1,0 +1,5 @@
+photo
+<%= link("Home", to: "/ui")%>
+<%= @fphoto %>
+
+<%= img_tag(Routes.static_path(@conn, "/images/#{@fphoto}")) %>

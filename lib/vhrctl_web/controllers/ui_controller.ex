@@ -6,25 +6,33 @@ defmodule VhrCtlWeb.UiController do
   @robot_url   Application.get_env(:vhrctl, :robot_url)
   
   def index(conn, _params) do
-    render(conn, "index.html", messenger: "", fphoto: "")
+    render(conn, "index.html", messenger: "")
   end
-  
+
+  def mv_rbt(conn, _params) do
+    %HTTPoison.Response{ body: response} =
+      HTTPoison.get! "#{@robot_url}/api/mv_rbt?cmd=f&val=2"
+    IO.inspect response, label: "MV_RBT"
+    render(conn, "index.html", messenger: "#{response}")
+  end
+
+    
   def take_picture(conn, _params) do
     HTTPoison.start
     response = HTTPoison.get! "#{@robot_url}/api/take_picture"
     %HTTPoison.Response{body: body} = response
     body = Poison.decode!(body)
     %{"filename" => filename} = body
-    IO.inspect response, label: "RESPONSE"
-    IO.inspect body, label: "BODY"
+    #IO.inspect response, label: "RESPONSE"
+    #IO.inspect body, label: "BODY"
     :timer.sleep(1000)
-    render(conn, "index.html", messenger: "take_picture", fphoto: "#{filename}")
+    render(conn, "photo.html", fphoto: "#{filename}")
   end
 
   def ping(conn, _params) do
     %HTTPoison.Response{ body: response} =
       HTTPoison.get! "#{@robot_url}/api/ping"
-    render(conn, "index.html", messenger: "#{response}", fphoto: "")
+    render(conn, "index.html", messenger: "#{response}")
   end
 
   def iflx(conn, _params) do
@@ -48,7 +56,7 @@ defmodule VhrCtlWeb.UiController do
     IO.inspect c, label: "COL"
     IO.inspect v, label: "VAL"
     IO.inspect response, label: "RESPONSE"
-    render(conn, "index.html", messenger: tabl, fphoto: "")
+    render(conn, "index.html", messenger: tabl)
   end
 
   def photo(conn, params) do
@@ -71,7 +79,7 @@ defmodule VhrCtlWeb.UiController do
     # IO.binwrite file, body
     # File.close file
     File.copy!(photo.path, "priv/static/images/#{filename}")
-    render(conn, "index.html", messenger: "hello", fphoto: "images/#{filename}")
+    render(conn, "photo.html", fphoto: "images/#{filename}")
   end
 
   def read_form(conn, acc) do

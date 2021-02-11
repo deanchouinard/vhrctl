@@ -24,6 +24,7 @@ defmodule VhrCtlWeb.Router do
     get "/take_picture", UiController, :take_picture
     get "/ping", UiController, :ping
     get "/iflx", UiController, :iflx
+    get "/mv_rbt", UiController, :mv_rbt
 
   end
 

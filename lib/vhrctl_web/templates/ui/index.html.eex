@@ -5,10 +5,8 @@ ui
 <%= link("Ping", to: "/ping")%>
 <br/>
 <%= link("Influxdb", to: "/iflx")%>
-
-<%= @fphoto %>
-
-<%= img_tag(Routes.static_path(@conn, "/images/#{@fphoto}")) %>
+<br/>
+<%= link("Move robot", to: "/mv_rbt") %>
 
   <h2>Hello World, from Phoenix!</h2>
 <%= raw(@messenger) %>
