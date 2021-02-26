@@ -8,6 +8,33 @@ ui
 <br/>
 <%= link("Move robot", to: "/mv_rbt") %>
 
+<%= form_for @conn, Routes.ui_path(@conn, :mv_rbt), [as: :ui], fn f -> %>
+  <div class="form-group">
+  <%= label do %>
+    <%= radio_button(f, :direction, "F") %>
+    Forward
+  <% end %>
+  <%= label do %>
+    <%= radio_button(f, :direction, "B") %>
+    Backward
+  <% end %>
+  <%= label do %>
+    <%= radio_button(f, :direction, "L") %>
+    Left
+  <% end %>
+  <%= label do %>
+    <%= radio_button(f, :direction, "R") %>
+    Right
+  <% end %>
+  <%= label do %>
+    Magnatude
+    <%= text_input f, :mag, [value: "2", default: "2"] %>
+  <% end %>
+  <%= number_input f, :val, [min: 1, max: 10] %>
+  </div>
+  <%= submit "Move Robot" %>
+<% end %>
+
   <h2>Hello World, from Phoenix!</h2>
 <%= raw(@messenger) %>
 

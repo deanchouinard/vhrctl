@@ -16,7 +16,13 @@ defmodule VhrCtlWeb.UiController do
     render(conn, "index.html", messenger: "#{response}")
   end
 
-    
+  def move_rbt(conn, params) do
+
+    IO.inspect params, label: "MOVE_ROBOT_PARAMS"
+    render(conn, "index.html", messenger: "MVR")
+
+  end
+
   def take_picture(conn, _params) do
     HTTPoison.start
     response = HTTPoison.get! "#{@robot_url}/api/take_picture"
