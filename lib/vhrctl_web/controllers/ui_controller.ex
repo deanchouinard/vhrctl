@@ -17,6 +17,12 @@ defmodule VhrCtlWeb.UiController do
   end
 
   def move_rbt(conn, params) do
+    body = "{\"date\" : \"#{vdate}\", \"ext_ip\" : \"#{external_ip}\",
+       \"temp\" : #{temp}, \"humid\" : #{humid}, \"batt\" : #{batt}}"
+
+    url = "#{@vhr_web_url}/api/env"                                        
+    response = HTTPoison.post url, body, [{"Content-Type", "application/jso     n"}] 
+
 
     IO.inspect params, label: "MOVE_ROBOT_PARAMS"
     render(conn, "index.html", messenger: "MVR")
