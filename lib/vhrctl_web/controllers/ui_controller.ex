@@ -17,15 +17,17 @@ defmodule VhrCtlWeb.UiController do
   end
 
   def move_rbt(conn, params) do
-    body = "{\"date\" : \"#{vdate}\", \"ext_ip\" : \"#{external_ip}\",
-       \"temp\" : #{temp}, \"humid\" : #{humid}, \"batt\" : #{batt}}"
+    #    body = "{\"date\" : \"#{vdate}\", \"ext_ip\" : \"#{external_ip}\",
+    #  \"temp\" : #{temp}, \"humid\" : #{humid}, \"batt\" : #{batt}}"
+    %{"ui" => %{ "direction" => dir, "mag" => mag} } = params
+    body = "{\"dir\" : \"#{dir}\", \"mag\" : \"#{mag}\"}"
+    url = "#{@robot_url}/api/move"
+    {:ok, %HTTPoison.Response{body: response}} = HTTPoison.post url, body, [{"Content-Type", "application/jso     n"}] 
 
-    url = "#{@vhr_web_url}/api/env"                                        
-    response = HTTPoison.post url, body, [{"Content-Type", "application/jso     n"}] 
-
-
+    IO.inspect response, lable: "RESP"
+    response = Poison.decode! response
     IO.inspect params, label: "MOVE_ROBOT_PARAMS"
-    render(conn, "index.html", messenger: "MVR")
+    render(conn, "index.html", messenger: response["id"])
 
   end
 
