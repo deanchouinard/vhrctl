@@ -1,13 +1,22 @@
 defmodule VhrCtlWeb.UiController do
   use VhrCtlWeb, :controller
   alias VhrCtlWeb.HTMLTable
-  
+
   @influxdb_url   Application.get_env(:vhrctl, :influxdb_url)
   @robot_url   Application.get_env(:vhrctl, :robot_url)
-  
+
   def index(conn, _params) do
     render(conn, "index.html", messenger: "")
   end
+
+  def read_sensor(conn, _params) do
+    %HTTPoison.Response{ body: response} =
+      HTTPoison.get! "#{@robot_url}/api/read_sensor"
+    IO.inspect response, label: "READ_SENSOR"
+    render(conn, "index.html", messenger: "#{response}")
+
+  end
+
 
   def mv_rbt(conn, _params) do
     %HTTPoison.Response{ body: response} =
@@ -22,7 +31,7 @@ defmodule VhrCtlWeb.UiController do
     %{"ui" => %{ "direction" => dir, "mag" => mag} } = params
     body = "{\"dir\" : \"#{dir}\", \"mag\" : \"#{mag}\"}"
     url = "#{@robot_url}/api/move"
-    {:ok, %HTTPoison.Response{body: response}} = HTTPoison.post url, body, [{"Content-Type", "application/jso     n"}] 
+    {:ok, %HTTPoison.Response{body: response}} = HTTPoison.post url, body, [{"Content-Type", "application/jso     n"}]
 
     IO.inspect response, lable: "RESP"
     response = Poison.decode! response
@@ -33,13 +42,14 @@ defmodule VhrCtlWeb.UiController do
 
   def take_picture(conn, _params) do
     HTTPoison.start
-    response = HTTPoison.get! "#{@robot_url}/api/take_picture"
+    response = HTTPoison.get! "#{@robot_url}/api/take_picture", [], recv_timeout: 200_000
     %HTTPoison.Response{body: body} = response
+    IO.inspect(body, label: "BODY")
     body = Poison.decode!(body)
     %{"filename" => filename} = body
     #IO.inspect response, label: "RESPONSE"
     #IO.inspect body, label: "BODY"
-    :timer.sleep(1000)
+    #:timer.sleep(1000)
     render(conn, "photo.html", fphoto: "#{filename}")
   end
 
@@ -77,16 +87,16 @@ defmodule VhrCtlWeb.UiController do
     IO.puts "PAGE CONTROLLER PHOTO"
     # {:ok, body, conn} = Plug.Conn.read_part_body(conn, length: 8_000_000)
     {:ok, body, conn} = read_form(conn, <<127>> )
-    IO.inspect conn, label: "CONN"
+    # IO.inspect conn, label: "CONN"
     photo = conn.body_params["photo"]
-    IO.inspect photo, label: "PHOTO"
+    # IO.inspect photo, label: "PHOTO"
     id = conn.body_params["id"]
-    IO.inspect id, label: "ID"
-    IO.inspect params, label: "PARAMS"
+    # IO.inspect id, label: "ID"
+    # IO.inspect params, label: "PARAMS"
     %{"photo" => photo} = params
-    IO.inspect photo, label: "PHOTO"
+    # IO.inspect photo, label: "PHOTO"
     %Plug.Upload{filename: filename} = photo
-    IO.inspect filename, label: "FILENAME"
+    # IO.inspect filename, label: "FILENAME"
     #IO.inspect params["photo"]
     # {:ok, file} = File.open "#{photo.path}", [:read]
     # {:ok, file} = File.open "test.png", [:write]
@@ -101,13 +111,12 @@ defmodule VhrCtlWeb.UiController do
       {:more, body, conn}
       -> IO.inspect body, label: "body-more"
         read_form(conn, << acc, body>> )
-      {:ok, body, conn} -> 
+      {:ok, body, conn} ->
         IO.inspect body, label: "body-ok"
         read_form(conn, <<acc, body>>)
-      {:done, conn} -> 
+      {:done, conn} ->
         IO.inspect acc, label: "acc-done"
-        {:ok, acc, conn} 
+        {:ok, acc, conn}
     end
   end
 end
-

@@ -1,4 +1,9 @@
 ui
+
+<br/>
+<%= link("Read Sensor", to: "/read_sensor") %>
+
+<br/>
 <%= link("Take picture", to: "/take_picture")%>
 
 <br/>
@@ -11,7 +16,7 @@ ui
 <%= form_for @conn, Routes.ui_path(@conn, :mv_rbt), [as: :ui], fn f -> %>
   <div class="form-group">
   <%= label do %>
-    <%= radio_button(f, :direction, "F") %>
+    <%= radio_button(f, :direction, "F", [checked: "checked"]) %>
     Forward
   <% end %>
   <%= label do %>
@@ -30,11 +35,10 @@ ui
     Magnatude
     <%= text_input f, :mag, [value: "2", default: "2"] %>
   <% end %>
-  <%= number_input f, :val, [min: 1, max: 10] %>
+  <%= number_input f, :val, [min: 1, max: 10, value: 2] %>
   </div>
   <%= submit "Move Robot" %>
 <% end %>
 
   <h2>Hello World, from Phoenix!</h2>
 <%= raw(@messenger) %>
-

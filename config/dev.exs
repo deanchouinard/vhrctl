@@ -77,5 +77,12 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 config :vhrctl, influxdb_url: 'http://localhost:8086'
-config :vhrctl, robot_url: 'http://localhost:4500'
 
+
+case Mix.target() do
+  :host ->
+    config :vhrctl, robot_url: 'http://localhost:4500'
+
+  :rpi3 ->
+    config :vhrctl, robot_url: 'http://192.168.0.184:4500'
+  end
