@@ -1,6 +1,9 @@
 ui
 
 <br/>
+<%= link("List Photos", to: "/list_pictures") %>
+<br/>
+
 <%= link("Read Sensor", to: "/read_sensor") %>
 
 <br/>

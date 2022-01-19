@@ -21,6 +21,7 @@ defmodule VhrCtlWeb.Router do
     post "/photo", UiController, :photo
 
     get "/ui", UiController, :index
+    get "/list_pictures", UiController, :list_pictures
     get "/take_picture", UiController, :take_picture
     get "/ping", UiController, :ping
     get "/iflx", UiController, :iflx

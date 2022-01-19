@@ -9,6 +9,12 @@ defmodule VhrCtlWeb.UiController do
     render(conn, "index.html", messenger: "")
   end
 
+  def list_pictures(conn, _params) do
+    photo_list = VhrCtl.Photo.photo_list()
+
+    render(conn, "photo-list.html", messenger: photo_list)
+  end
+
   def read_sensor(conn, _params) do
     %HTTPoison.Response{ body: response} =
       HTTPoison.get! "#{@robot_url}/api/read_sensor"
@@ -45,12 +51,13 @@ defmodule VhrCtlWeb.UiController do
     response = HTTPoison.get! "#{@robot_url}/api/take_picture", [], recv_timeout: 200_000
     %HTTPoison.Response{body: body} = response
     IO.inspect(body, label: "BODY")
-    body = Poison.decode!(body)
-    %{"filename" => filename} = body
+    _body = Poison.decode!(body)
+    # %{"filename" => filename} = body
     #IO.inspect response, label: "RESPONSE"
     #IO.inspect body, label: "BODY"
     #:timer.sleep(1000)
-    render(conn, "photo.html", fphoto: "#{filename}")
+    #render(conn, "photo.html", fphoto: "#{filename}")
+    render(conn, "index.html", messenger: "take picture")
   end
 
   def ping(conn, _params) do
@@ -102,6 +109,9 @@ defmodule VhrCtlWeb.UiController do
     # {:ok, file} = File.open "test.png", [:write]
     # IO.binwrite file, body
     # File.close file
+    IO.inspect(conn, label: "CONN")
+    conn
+    |> put_flash(:info, "A new photo has arrived.")
     File.copy!(photo.path, "priv/static/images/#{filename}")
     render(conn, "photo.html", fphoto: "images/#{filename}")
   end
