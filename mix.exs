@@ -10,7 +10,17 @@ defmodule VhrCtl.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+
+      # Docs
+      name: "VhrCtl",
+      source_url: "https://github.com/deanchouinard/vhrctl",
+      homepage_url: "http://YOUR_PROJECT_HOMEPAGE",
+      docs: [
+        main: "VhrCtl", # The main page in the docs
+        # logo: "path/to/logo.png",
+        extras: ["README.md", "notes.md"]
+      ]
     ]
   end
 
@@ -46,7 +56,8 @@ defmodule VhrCtl.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:httpoison, "~> 1.7"},
-      {:poison, "~> 3.1"}
+      {:poison, "~> 3.1"},
+      {:ex_doc, "~> 0.27", only: :dev, runtime: false}
     ]
   end
 

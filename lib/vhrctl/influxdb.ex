@@ -1,5 +1,7 @@
 defmodule VhrCtl.InfluxDB do
-
+@moduledoc """
+Interface to InfluxDB.
+"""
   @influxdb_url "http://localhost:8086/"
 
   def insert(temp, humid, batt) do
