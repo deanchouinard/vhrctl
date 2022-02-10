@@ -1,8 +1,8 @@
 defmodule VhrCtlWeb.UiController do
   use VhrCtlWeb, :controller
+  alias VhrCtl.Sensor
 
-
-  @influxdb_url   Application.get_env(:vhrctl, :influxdb_url)
+  #@influxdb_url   Application.get_env(:vhrctl, :influxdb_url)
   @robot_url   Application.get_env(:vhrctl, :robot_url)
 
   def index(conn, _params) do
@@ -16,9 +16,8 @@ defmodule VhrCtlWeb.UiController do
   end
 
   def read_sensor(conn, _params) do
-    %HTTPoison.Response{ body: response} =
-      HTTPoison.get! "#{@robot_url}/api/read_sensor"
-    IO.inspect response, label: "READ_SENSOR"
+    response = Sensor.read_sensor()
+
     render(conn, "index.html", messenger: "#{response}")
 
   end

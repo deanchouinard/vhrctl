@@ -8,8 +8,31 @@ Interface to InfluxDB.
 
   def read_table() do
 
-    %HTTPoison.Response{ body: response} = HTTPoison.get! '#{@influxdb_url}/query?db=mydb;q=select+*+from+env+order+by+desc+limit+20;'
+    url = "#{@influxdb_url}/query?db=mydb;q=select+*+from+env+order+by+desc+limit+20;"
+    # %HTTPoison.Response{ body: response} = HTTPoison.get! url
 
+    case HTTPoison.get(url) do
+      {:ok, %HTTPoison.Response{status_code: 200, body: response}} ->
+        build_table(response)
+      {:ok, %HTTPoison.Response{status_code: 404}} ->
+        "Not found :("
+      {:error, %HTTPoison.Error{reason: reason}} ->
+        IO.inspect reason
+        "Error"
+    end
+
+  end
+
+  def insert(temp, humid, batt) do
+
+    data = 'env,location=unit43,sensor=test temp=#{temp},humid=#{humid},batt=#{batt}'
+
+    # :httpc.request(:post, {'http://localhost:8086/write?db=mydb', [], 'application/binary', data}, [], [])
+    IO.inspect :httpc.request(:post, {'#{@influxdb_url}write?db=mydb', [], 'application/binary', data}, [], []), label: "INFLUXDB"
+
+  end
+
+  def build_table(response) do
     response = Poison.decode(response)
     #{:ok, "results" => [%{"series" => [%{"columns" => col}]}]} = response
     IO.inspect response, label: "RESPONSE"
@@ -30,14 +53,6 @@ Interface to InfluxDB.
     IO.inspect response, label: "RESPONSE"
 
     tabl
-  end
-  def insert(temp, humid, batt) do
-
-    data = 'env,location=unit43,sensor=test temp=#{temp},humid=#{humid},batt=#{batt}'
-
-    # :httpc.request(:post, {'http://localhost:8086/write?db=mydb', [], 'application/binary', data}, [], [])
-    IO.inspect :httpc.request(:post, {'#{@influxdb_url}write?db=mydb', [], 'application/binary', data}, [], []), label: "INFLUXDB"
-
   end
 
 
