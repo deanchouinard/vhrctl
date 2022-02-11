@@ -10,6 +10,8 @@ defmodule VhrCtlWeb.Endpoint do
     signing_salt: "jnuBFhY3"
   ]
 
+  plug Plug.Session, @session_options
+
   socket "/socket", VhrCtlWeb.UserSocket,
     websocket: true,
     longpoll: false
@@ -24,7 +26,7 @@ defmodule VhrCtlWeb.Endpoint do
     at: "/",
     from: :vhrctl,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    only: ~w(assets fonts images favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
