@@ -90,3 +90,5 @@ case Mix.target() do
   :rpi3 ->
     config :vhrctl, robot_url: 'http://192.168.0.184:4500'
   end
+
+  import_config "dev.secret.exs"

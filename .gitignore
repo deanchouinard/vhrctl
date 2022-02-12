@@ -38,3 +38,6 @@ npm-debug.log
 *.jpg
 
 /.vscode/
+
+*.secret.exs
+
